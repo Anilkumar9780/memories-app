@@ -4,7 +4,7 @@ export default makeStyles((theme) => ({
   media: {
     borderRadius: '20px',
     objectFit: 'cover',
-    width: '100%',
+    width: '700px',
     maxHeight: '600px',
 
   },
@@ -36,5 +36,13 @@ export default makeStyles((theme) => ({
   loadingPaper: {
     display: 'flex', justifyContent: 'center', alignItems: 'center', padding: '20px', borderRadius: '15px', height: '39vh',
   },
-  
+  commentOuterContainer: {
+    display: 'flex', justifyContent: 'space-between',
+  },
+  commentsInnerContainer: {
+    height: "200px",
+    overflowY: 'auto',
+    marginRight: '30px',
+
+  }
 }));

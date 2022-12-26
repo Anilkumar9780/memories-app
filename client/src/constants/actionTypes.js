@@ -12,3 +12,5 @@ export const START_LOADING = 'START_LOADING';
 export const END_LOADING = 'END_LOADING';
 
 export const FETCH_POST_DETAIL = 'FETCH_POST_DETAIL';
+
+export const POST_COMMENT = 'POST_COMMENT';

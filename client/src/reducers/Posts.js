@@ -8,7 +8,8 @@ import {
   FETCH_BY_SEARCH,
   START_LOADING,
   END_LOADING,
-  FETCH_POST_DETAIL
+  FETCH_POST_DETAIL,
+  POST_COMMENT
 } from '../constants/actionTypes';
 
 export default (state = { isLoading: true, posts: [] }, action) => {
@@ -35,6 +36,17 @@ export default (state = { isLoading: true, posts: [] }, action) => {
     // get single post detail
     case FETCH_POST_DETAIL:
       return { ...state, post: action.payload };
+
+    // user comment at post
+    case POST_COMMENT:
+      //change the post tht just received a comment
+      return {
+        ...state, posts: state.posts.map((post) => {
+          if (post._id === action.payload._id) return action.payload;
+          // return all the other post normally 
+          return post;
+        })
+      }
 
     //like uers by id
     case LIKE:

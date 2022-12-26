@@ -7,6 +7,7 @@ import useStyles from './Styles';
 //packages
 import { useDispatch, useSelector } from 'react-redux';
 import FileBase from 'react-file-base64';
+import { useNavigate } from 'react-router-dom';
 
 //components
 import { createPost, updatePost } from '../../actions/Posts';
@@ -21,6 +22,7 @@ const Form = ({ currentId, setCurrentId }) => {
   const post = useSelector((state) => (currentId ? state.posts.posts.find((message) => message._id === currentId) : null));
   const dispatch = useDispatch();
   const classes = useStyles();
+  const navigate = useNavigate();
   const user = JSON.parse(localStorage.getItem('profile'));
 
   // onmonut
@@ -43,7 +45,7 @@ const Form = ({ currentId, setCurrentId }) => {
   const handleSubmit = async (e) => {
     e.preventDefault();
     if (currentId === 0) {
-      dispatch(createPost({ ...postData, name: user?.result?.name }));
+      dispatch(createPost({ ...postData, name: user?.result?.name }, navigate));
       clear();
     } else {
       dispatch(updatePost(currentId, { ...postData, name: user?.result?.name }));

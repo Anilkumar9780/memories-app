@@ -10,6 +10,7 @@ import { useSelector, useDispatch } from 'react-redux';
 import { useParams, useNavigate } from 'react-router-dom';
 
 //component
+import CommentSection from './CommentSection';
 import { getPostDetail } from '../../actions/Posts';
 import { getPostBySearch } from './../../actions/Posts';
 
@@ -39,9 +40,8 @@ const PostsDetails = () => {
         </Paper>
     };
 
-    const recommendedPosts = posts.filter(({ _id }) => _id == post._id);
-    console.log(recommendedPosts);
-
+    const recommendedPosts = posts.filter(({ _id }) => _id !== post._id);
+    console.log(recommendedPosts)
     const openPost = (id) => navigate(`/posts/${id}`);
 
     return (
@@ -56,25 +56,25 @@ const PostsDetails = () => {
                     <Divider style={{ margin: '20px 0' }} />
                     <Typography variant="body1"><strong>Realtime Chat - coming soon!</strong></Typography>
                     <Divider style={{ margin: '20px 0' }} />
-                    <Typography variant="body1"><strong>Comments - coming soon!</strong></Typography>
+                    <CommentSection post={post} />
                     <Divider style={{ margin: '20px 0' }} />
                 </div>
                 <div className={classes.imageSection}>
-                    <img className={classes.media} src={post.selectedFile || 'https://user-images.githubusercontent.com/194400/49531010-48dad180-f8b1-11e8-8d89-1e61320e1d82.png'} alt={post.title} />
+                    <img width='300px' className={classes.media} src={post.selectedFile || 'https://user-images.githubusercontent.com/194400/49531010-48dad180-f8b1-11e8-8d89-1e61320e1d82.png'} alt={post.title} />
                 </div>
             </div>
-            {recommendedPosts.length && (
+            {!!recommendedPosts.length && (
                 <div className={classes.section}>
                     <Typography gutterBottom variant='h5'> You might also like : </Typography>
                     <Divider />
                     <div className={classes.recommendedPosts}>
-                        {recommendedPosts?.map((data) =>
-                            <div style={{ margin: "20px", cursor: "pointer", borderRadius: '15px' }} onClick={() => openPost(data._id)} key={data._id}>
-                                <Typography gutterBottom variant='h6'> {data.title}</Typography>
-                                <Typography gutterBottom variant='subtitle2'> {data.name}</Typography>
-                                <Typography gutterBottom variant='subtitle2'> {data.message}</Typography>
-                                <Typography gutterBottom variant='subtitle3'>Likes: {data.likes?.length}</Typography>
-                                <img width='200px' src={data.selectedFile || 'https://user-images.githubusercontent.com/194400/49531010-48dad180-f8b1-11e8-8d89-1e61320e1d82.png'} alt={data.title} />
+                        {recommendedPosts.map(({ title, _id, name, likes, message, selectedFile }) =>
+                            <div style={{ margin: "20px", cursor: "pointer", borderRadius: '15px' }} onClick={() => openPost(_id)} key={_id}>
+                                <Typography gutterBottom variant='h6'> {title}</Typography>
+                                <Typography gutterBottom variant='subtitle2'> {name}</Typography>
+                                <Typography gutterBottom variant='subtitle2'> {message}</Typography>
+                                <Typography gutterBottom variant='subtitle1'>Likes: {likes?.length}</Typography>
+                                <img width='200px' src={selectedFile} alt={title} />
                             </div>
                         )}
                     </div>

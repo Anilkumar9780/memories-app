@@ -18,6 +18,9 @@ app.use(cors());
 app.use('/posts', postRoutes);
 app.use('/user', userRoutes);
 
+app.get('/', (req, res) => {
+  res.send('APP IS RUNNING');
+})
 // mongodb database link
 const CONNECTION_URL = 'mongodb://localhost:27017/posts';
 

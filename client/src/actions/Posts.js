@@ -8,7 +8,9 @@ import {
   FETCH_BY_SEARCH,
   START_LOADING,
   END_LOADING,
-  FETCH_POST_DETAIL
+  FETCH_POST_DETAIL,
+
+  POST_COMMENT
 } from '../constants/actionTypes';
 
 // api 
@@ -68,10 +70,11 @@ export const getPostBySearch = (searchQuery) => async (dispatch) => {
  * create post 
  * @param {object} post 
  */
-export const createPost = (post) => async (dispatch) => {
+export const createPost = (post, navigate) => async (dispatch) => {
   try {
     dispatch({ type: START_LOADING })
     const { data } = await api.createPost(post);
+    navigate(`/posts/${data._id}`)
     dispatch({ type: CREATE, payload: data });
     dispatch({ type: END_LOADING });
   } catch (error) {
@@ -119,4 +122,18 @@ export const deletePost = (id) => async (dispatch) => {
   }
 };
 
-
+/**
+ *  comment post action
+ * @param {string} value 
+ * @param {string} id 
+ * @returns node
+ */
+export const commentPost = (value, id) => async (dispatch) => {
+  try {
+    const { data } = await api.comment(value, id);
+    dispatch({ type: POST_COMMENT, payload: data });
+    return data.comments;
+  } catch (error) {
+    console.log(error.message);
+  }
+}
