@@ -4,13 +4,13 @@ import React, { useState } from 'react';
 import { Card, CardActions, CardContent, CardMedia, Button, Typography, ButtonBase } from '@material-ui/core';
 import ThumbUpAltIcon from '@material-ui/icons/ThumbUpAlt';
 import DeleteIcon from '@material-ui/icons/Delete';
-import MoreHorizIcon from '@material-ui/icons/MoreHoriz';
+import EditIcon from '@material-ui/icons/Edit';
 import ThumbUpAltOutlined from "@material-ui/icons/ThumbUpAltOutlined";
 
 //packages
 import moment from 'moment';
 import { useDispatch } from 'react-redux';
-import { useNavigate } from 'react-router-dom';
+import { Link, useNavigate } from 'react-router-dom';
 
 //components
 import { likePost, deletePost } from '../../../actions/Posts';
@@ -22,14 +22,15 @@ const Post = ({
   post,
   setCurrentId
 }) => {
+  const user = JSON.parse(localStorage.getItem('profile'));
+  const [likes, setLikes] = useState(post?.likes);
   const dispatch = useDispatch();
   const classes = useStyles();
   const navigate = useNavigate();
-  const user = JSON.parse(localStorage.getItem('profile'));
-  const [likes, setLikes] = useState(post?.likes);
+  const url = "http://localhost:5000/";
 
-  const userId = user?.result.googleId || user?.result?._id;
-  const hasLikePost = post.likes.find((like) => like === userId);
+  const userId = user?.result?.googleId || user?.result?._id;
+  const hasLikePost = post?.likes?.find((like) => like === userId);
 
   /**
    * handle user like at post 
@@ -74,30 +75,32 @@ const Post = ({
 
   return (
     <Card className={classes.card} raised elevation={6}>
+      <CardMedia className={classes.media} image={`${url + post.file}` || 'https://user-images.githubusercontent.com/194400/49531010-48dad180-f8b1-11e8-8d89-1e61320e1d82.png'} title={post.title} />
+      <div className={classes.overlay}>
+        <Link to={`/posts/user-profile/${post.postedBy}`} style={{ textDecoration: 'none', color: "white" }} >
+          <Typography variant="h6" >{post.name}</Typography>
+        </Link>
+        <Typography variant="body2">{moment(post.createdAt).fromNow()}</Typography>
+      </div>
+      {/* edit post button */}
+      <div className={classes.overlay2} name="edit">
+        {(user?.result?.name === post?.name || user?.result?._id === post?._id) && (
+          <Button
+            onClick={(e) => {
+              e.stopPropagation();
+              setCurrentId(post._id);
+            }}
+            style={{ color: 'white', marginLeft: "100px" }}
+            size="small"
+          >
+            <EditIcon />
+          </Button>
+        )}
+      </div>
       <ButtonBase
         className={classes.cardAction}
         onClick={openPost}
       >
-        <CardMedia className={classes.media} image={post.selectedFile || 'https://user-images.githubusercontent.com/194400/49531010-48dad180-f8b1-11e8-8d89-1e61320e1d82.png'} title={post.title} />
-        <div className={classes.overlay}>
-          <Typography variant="h6">{post.name}</Typography>
-          <Typography variant="body2">{moment(post.createdAt).fromNow()}</Typography>
-        </div>
-        {/* edit post button */}
-        <div className={classes.overlay2} name="edit">
-          {(user?.result?.name === post?.name || user?.result?._id === post?._id) && (
-            <Button
-              onClick={(e) => {
-                e.stopPropagation();
-                setCurrentId(post._id);
-              }}
-              style={{ color: 'white' }}
-              size="small"
-            >
-              <MoreHorizIcon fontSize="default" />
-            </Button>
-          )}
-        </div>
         <div className={classes.details}>
           <Typography variant="body2" color="textSecondary" component="h2">{post.tags.map((tag) => `#${tag} `)}</Typography>
         </div>

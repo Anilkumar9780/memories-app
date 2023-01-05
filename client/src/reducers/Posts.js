@@ -1,6 +1,7 @@
 // component actiontype
 import {
   FETCH_ALL,
+  USER_PROFILE,
   CREATE,
   UPDATE,
   DELETE,
@@ -9,7 +10,10 @@ import {
   START_LOADING,
   END_LOADING,
   FETCH_POST_DETAIL,
-  POST_COMMENT
+  POST_COMMENT,
+  USER_PROFILE_POST,
+  SERACH_USER,
+  RESET_PASSWORD
 } from '../constants/actionTypes';
 
 export default (state = { isLoading: true, posts: [] }, action) => {
@@ -33,6 +37,16 @@ export default (state = { isLoading: true, posts: [] }, action) => {
     case FETCH_BY_SEARCH:
       return { ...state, posts: action.payload };
 
+    //user profile posts get
+    case USER_PROFILE:
+      return { ...state, user: action.payload };
+    case USER_PROFILE_POST:
+      return { ...state, userPosts: action.payload };
+
+    //resetPassword
+    case RESET_PASSWORD:
+      return { ...state, resetPassword: action.payload.user }
+
     // get single post detail
     case FETCH_POST_DETAIL:
       return { ...state, post: action.payload };
@@ -47,6 +61,10 @@ export default (state = { isLoading: true, posts: [] }, action) => {
           return post;
         })
       }
+
+    // search User
+    case SERACH_USER:
+      return { ...state, users: action.payload };
 
     //like uers by id
     case LIKE:

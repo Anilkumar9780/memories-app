@@ -12,17 +12,17 @@ import { commentPost } from '../../actions/Posts';
 
 const CommentSection = ({ post }) => {
     const classes = useStyles();
-    const dispatch = useDispatch();
     const [comments, setComments] = useState(post?.comments);
     const [comment, setComment] = useState('');
-    const commentsRef = useRef();
     const user = JSON.parse(localStorage.getItem("profile"));
+    const commentsRef = useRef();
+    const dispatch = useDispatch();
 
     /**
-     *  handle user comment at post 
+     *  handle user comment by user at post 
      */
     const handleComment = async () => {
-        const finalComment = `${user.result.name}: ${comment}`
+        const finalComment = `${user.result.name} : ${comment}`
         const newComments = await dispatch(commentPost(finalComment, post._id));
         setComments(newComments);
         setComment('');
@@ -49,7 +49,7 @@ const CommentSection = ({ post }) => {
                         <Typography gutterBottom variant='h6' >Write a Comment</Typography>
                         <TextField
                             fullWidth
-                            rows={4}
+                            minRows={4}
                             variant='outlined'
                             label='Comment'
                             multiline

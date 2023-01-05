@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 
 // mataerial ui packages
 import { Container, Grow, Grid, Paper, AppBar, TextField, Button } from '@material-ui/core';
@@ -11,7 +11,7 @@ import ChipInput from 'material-ui-chip-input';
 //components
 import Posts from '../Posts/Posts';
 import Form from '../Form/Form';
-import { getPostBySearch } from '../../actions/Posts';
+import { getPostBySearch, searchUsers } from '../../actions/Posts';
 import Paginate from '../Pagination/Pagination';
 
 //style
@@ -24,6 +24,8 @@ function useQuery() {
 
 const Home = () => {
     const [currentId, setCurrentId] = useState(0);
+    const [searchUserProfile, setSearchUserProfile] = useState('');
+    const user = JSON.parse(localStorage.getItem('profile'));
     const dispatch = useDispatch();
     const classes = useStyles();
     const query = useQuery();
@@ -55,11 +57,41 @@ const Home = () => {
         };
     };
 
+    /**
+     * search  user profile 
+     */
+    const handleUserProfileSearch = () => {
+        if (searchUserProfile.trim()) {
+            dispatch(searchUsers(searchUserProfile));
+            navigate(`/user/search-users`);
+        } else {
+            navigate('/');
+        };
+    }
+
+    /**
+     * enter key call the saerch post function
+     * @param {object} e 
+     */
+    const handleKey = (e) => {
+        if (e.keyCode === 13) {
+            handleUserProfileSearch();
+        };
+    };
+
     // add tags
     const handleAdd = (tag) => setTags([...tags, tag]);
 
     // Delete tags
     const handleDelete = (tagToDelete) => setTags(tags.filter((tag) => tag !== tagToDelete));
+
+    useEffect(() => {
+        if (!user) {
+            navigate("/auth");
+            return;
+        }
+        return;
+    }, [user]);
 
     return (
         <Grow in>
@@ -96,6 +128,27 @@ const Home = () => {
                                 Search
                             </Button>
                         </AppBar>
+                        <AppBar className={classes.appBarSearch} position='static' color='inherit'>
+                            <TextField
+                                name="search"
+                                variant='outlined'
+                                label='Search User Profile'
+                                fullWidth
+                                value={searchUserProfile}
+                                onChange={(e) => setSearchUserProfile(e.target.value)}
+                                onKeyDown={handleKey}
+                            />
+
+                            <Button
+                                onClick={handleUserProfileSearch}
+                                className={classes.searchButton}
+                                variant='contained'
+                                color='primary'
+                            >
+                                Search Users
+                            </Button>
+                        </AppBar>
+
                         <Form currentId={currentId} setCurrentId={setCurrentId} />
                         {(!searchQuery && !tags?.length) && (
                             <Paper className={classes.pagination} elevation={4}>

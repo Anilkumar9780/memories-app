@@ -5,12 +5,12 @@ import { Container, Avatar, Paper, Grid, Typography, Button } from '@material-ui
 import LockOutlinedIcon from '@material-ui/icons/LockOutlined';
 
 // pakages
-import { ToastContainer, toast } from 'react-toastify';
+import { toast } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
 import GoogleLogin from 'react-google-login';
 import { gapi } from 'gapi-script';
 import { useDispatch } from 'react-redux';
-import { useNavigate } from 'react-router-dom';
+import { useNavigate, Link } from 'react-router-dom';
 
 //style
 import useStyles from './Styles';
@@ -164,30 +164,23 @@ const Auth = () => {
                             cookiePolicy={'single_host_origin'}
                         />
 
-                        <Grid container justify='flex-end'>
+                        <Grid container justifyContent='flex-end'>
                             <Grid item>
                                 {/* switch mode button have an account then sign in page then not have a/c move to sign up page  */}
                                 <Button onClick={switchMode}>
                                     {isSignUp ? "Already have an account? Sign In" : "Don't have account? Sign Up"}
+                                </Button>
+                                <div></div>
+                                <Button>
+                                    <Link to="/user/reset-password" style={{ textDecoration: 'none', color: "black" }}>
+                                        Forgot password ?
+                                    </Link>
                                 </Button>
                             </Grid>
                         </Grid>
                     </form>
                 </Paper>
             </Container>
-            {/* popup message  */}
-            <ToastContainer
-                position="bottom-right"
-                autoClose={2000}
-                hideProgressBar={false}
-                newestOnTop={false}
-                closeOnClick
-                rtl={false}
-                pauseOnFocusLoss
-                draggable
-                pauseOnHover
-                theme="colored"
-            />
         </>
     );
 }
