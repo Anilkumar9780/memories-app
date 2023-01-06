@@ -85,17 +85,15 @@ const Home = () => {
     // Delete tags
     const handleDelete = (tagToDelete) => setTags(tags.filter((tag) => tag !== tagToDelete));
 
-    useEffect(() => {
-        if (!user) {
-            navigate("/auth");
-            return;
-        }
-        return;
-    }, [user]);
-
-    return (
+    if (user) return (
         <Grow in>
             <Container maxWidth='xl'>
+                {/* <Button
+                    variant='contained'
+                    color='primary'
+                >
+                    Search
+                </Button> */}
                 <Grid container justifyContent="space-between" alignItems="stretch" spacing={3} className={classes.gridContainer}>
                     <Grid item xs={12} sm={7} >
                         <Posts setCurrentId={setCurrentId} />
@@ -137,8 +135,7 @@ const Home = () => {
                                 value={searchUserProfile}
                                 onChange={(e) => setSearchUserProfile(e.target.value)}
                                 onKeyDown={handleKey}
-                            />
-
+                            />&nbsp;
                             <Button
                                 onClick={handleUserProfileSearch}
                                 className={classes.searchButton}

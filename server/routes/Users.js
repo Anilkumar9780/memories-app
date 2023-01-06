@@ -23,5 +23,6 @@ router.patch('/follow', auth, followUser);
 router.patch("/unfollow", auth, unfollowUser);
 router.post('/reset-password', resetPassword)
 router.post('/new-password', changePassword)
+router.get('/following-posts', auth, getFollowingPost)
 
 export default router;

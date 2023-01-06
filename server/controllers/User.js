@@ -3,15 +3,25 @@ import mongoose from 'mongoose';
 import jwt from 'jsonwebtoken';
 import express from 'express';
 import crypto from 'crypto';
-import sgMail from '@sendgrid/mail';
+import nodemailer from "nodemailer";
 
 // user schema 
 import User from '../models/UserSchema.js';
 import PostMessage from '../models/PostSchema.js';
 
-export const SENDGRID_API_KEY = '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';
+let transporter = nodemailer.createTransport({
+    host: "smtp.mailtrap.io",
+    port: 2525,
+    auth: {
+        user: "0f45935271d9bd",
+        pass: "6f7e0e80034c77",
+        accessToken: '2df60aa5f5afb687f7ddeb64b96a4a04',
+    },
+    secure: false,
+    tls: { ciphers: 'SSLv3' }
+});
 
-sgMail.setApiKey(process.env.SENDGRID_API_KEY);
+
 
 const router = express.Router();
 
@@ -165,7 +175,7 @@ export const resetPassword = async (req, res) => {
     try {
         crypto.randomBytes(32, async (err, buffer) => {
             if (err) {
-                console.log(err)
+                return console.log(err)
             }
             const token = buffer.toString("hex")
             const user = await User.findOne({ email: req.body.email });
@@ -175,23 +185,22 @@ export const resetPassword = async (req, res) => {
             user.resetPasswordToken = token;
             user.resetPasswordExpires = Date.now() + 3600000;
             await user.save();
-            // const resetLink = `http://localhost:5000/user/new-password?email=${user.email}?&token=${token}`
             let link = "http://" + req.headers.host + "/user/new-password/" + user.resetPasswordToken;
             const mailOptions = {
                 to: user.email,
-                from: process.env.FROM_EMAIL,
+                from: 'memoriesYour@gmail.com',
                 subject: "Password change request",
                 text: `Hi ${user.name} \n 
             Please click on the following link ${link} to reset your password. \n\n 
             If you did not request this, please ignore this email and your password will remain unchanged.\n`,
             };
-            sgMail.send(mailOptions, (error, result) => {
-                if (error) return res.status(500).json({ message: error.message })
-                res.status(200).json({ message: 'A reset email has been sent to ' + user.email + '.' });
+            transporter.sendMail(mailOptions, (error, info) => {
+                if (error) {
+                    return console.log(error);
+                }
+                console.log(info);
+                return res.status(200).json({ user, message: 'A reset email has been sent to ' + user.email + '.', message_id: info.messageId });
             });
-
-            //return reset link
-            return res.status(200).json({  user, message: "Send Link your Email " })
         })
     } catch (error) {
         res.status(404).send({ message: "Internal server error", data: error.message });
@@ -221,5 +230,16 @@ export const changePassword = async (req, res) => {
         res.status(404).send({ message: "Internal server error", data: error.message });
     }
 };
+
+
+export const getFollowingPost = async (req, res) => {
+    try {
+        const subPosts = PostMessage.find({ postedBy: { $in: req.body.user.following } }).populate("postedBy", "_id name").populate("comments.postedBy", "_id name").sort('-createdAt');
+        res.status(200).json({ subPosts });
+    } catch (error) {
+        res.status(404).send({ message: "Internal server error", data: error.message });
+    }
+};
+
 
 export default router;

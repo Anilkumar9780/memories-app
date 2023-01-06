@@ -23,7 +23,7 @@ const ResetPassword = () => {
     // reset password
     const handleResetPassword = () => {
         dispatch(resetPassword(email));
-        navigate('/user/new-password')
+        navigate('/auth')
     };
 
     return (

@@ -42,6 +42,9 @@ app.use(bodyParser.urlencoded({ limit: '30mb', extended: true }));
 app.use(cookieParser("secret123"));
 app.use(cors());
 app.use('/uploads', express.static('uploads'));
+// mongoose.set('useNewUrlParser', true);
+// mongoose.set('useFindAndModify', false);
+mongoose.set('useCreateIndex', true);
 
 // route 
 app.use('/posts', postRoutes);
