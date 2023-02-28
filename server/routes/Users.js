@@ -10,6 +10,7 @@ import {
     signup,
     unfollowUser,
     userProfile,
+    getFollowingPost
 } from '../controllers/User.js';
 import auth from '../middleware/Auth.js'
 

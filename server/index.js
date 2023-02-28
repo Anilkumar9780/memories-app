@@ -65,7 +65,7 @@ app.get('/', (req, res) => {
 });
 
 // mongodb database link
-const CONNECTION_URL = 'mongodb://localhost:27017/posts';
+const CONNECTION_URL = 'mongodb+srv://anilkumar:bL9NBVIBzLam6VO6@cluster0.hozvqhj.mongodb.net/?retryWrites=true&w=majority';
 
 // start server(port)
 const PORT = process.env.PORT || 5000;

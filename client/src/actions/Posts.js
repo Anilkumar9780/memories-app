@@ -35,7 +35,7 @@ export const getPosts = (page) => async (dispatch) => {
     dispatch({ type: FETCH_ALL, payload: data });
     dispatch({ type: END_LOADING });
   } catch (err) {
-    toast.error(err.response.data.message, {
+    toast.error(err?.response?.data?.message, {
       position: "bottom-right"
     });
   }
@@ -53,7 +53,7 @@ export const getPostDetail = (id) => async (dispatch) => {
     dispatch({ type: FETCH_POST_DETAIL, payload: data });
     dispatch({ type: END_LOADING });
   } catch (err) {
-    toast.error(err.response.data.message, {
+    toast.error(err?.response?.data?.message, {
       position: "bottom-right"
     });
   }
@@ -72,7 +72,7 @@ export const getPostBySearch = (searchQuery) => async (dispatch) => {
     dispatch({ type: FETCH_BY_SEARCH, payload: data });
     dispatch({ type: END_LOADING });
   } catch (err) {
-    toast.error(err.response.data.message, {
+    toast.error(err?.response?.data?.message, {
       position: "bottom-right"
     });
   }
@@ -88,14 +88,14 @@ export const createPost = (formData, navigate) => async (dispatch) => {
   try {
     dispatch({ type: START_LOADING });
     const { data } = await api.createPost(formData);
-    navigate(`/posts/${data._id}`)
+    navigate(`/posts/${data?._id}`)
     dispatch({ type: CREATE, payload: data });
     toast.success(data.message, {
       position: "bottom-right"
     });
     dispatch({ type: END_LOADING });
   } catch (err) {
-    toast.error(err.response.data.message, {
+    toast.error(err?.response?.data?.message, {
       position: "bottom-right"
     });
   }
@@ -114,7 +114,7 @@ export const updatePost = (id, post) => async (dispatch) => {
       position: "bottom-right"
     });
   } catch (err) {
-    toast.error(err.response.data.message, {
+    toast.error(err?.response?.data?.message, {
       position: "bottom-right"
     });
   }
@@ -132,7 +132,7 @@ export const likePost = (id) => async (dispatch) => {
       position: "bottom-right"
     });
   } catch (err) {
-    toast.error(err.response.data.message, {
+    toast.error(err?.response?.data?.message, {
       position: "bottom-right"
     });
   }
@@ -150,7 +150,7 @@ export const deletePost = (id) => async (dispatch) => {
       position: "bottom-right"
     });
   } catch (err) {
-    toast.error(err.response.data.message, {
+    toast.error(err?.response?.data?.message, {
       position: "bottom-right"
     });
   }
@@ -166,9 +166,9 @@ export const commentPost = (value, id) => async (dispatch) => {
   try {
     const { data } = await api.comment(value, id);
     dispatch({ type: POST_COMMENT, payload: data });
-    return data.comments;
+    return data?.comments;
   } catch (err) {
-    toast.error(err.response.data.message, {
+    toast.error(err?.response?.data?.message, {
       position: "bottom-right"
     });
   }
@@ -187,7 +187,7 @@ export const userProfile = (id) => async (dispatch) => {
     dispatch({ type: USER_PROFILE_POST, payload: data.post });
     dispatch({ type: END_LOADING });
   } catch (err) {
-    toast.error(err.response.data.message, {
+    toast.error(err?.response?.data?.message, {
       position: "bottom-right"
     });
   }
@@ -202,10 +202,10 @@ export const searchUsers = (searchUserProfile) => async (dispatch) => {
   try {
     dispatch({ type: START_LOADING });
     const { data } = await api.searchUser(searchUserProfile);
-    dispatch({ type: SERACH_USER, payload: data.user });
+    dispatch({ type: SERACH_USER, payload: data?.user });
     dispatch({ type: END_LOADING });
   } catch (err) {
-    toast.error(err.response.data.message, {
+    toast.error(err?.response?.data?.message, {
       position: "bottom-right"
     });
   }
@@ -224,7 +224,7 @@ export const follow = (followId, user, setFollowing) => async (dispatch) => {
       position: "bottom-right"
     });
   } catch (err) {
-    toast.error(err.response.data.message, {
+    toast.error(err?.response?.data?.message, {
       position: "bottom-right"
     });
   }
@@ -244,7 +244,7 @@ export const unFollow = (unFollowId, user, setFollowing) => async (dispatch) => 
       position: "bottom-right"
     });
   } catch (err) {
-    toast.error(err.response.data.message, {
+    toast.error(err?.response?.data?.message, {
       position: "bottom-right"
     });
   }

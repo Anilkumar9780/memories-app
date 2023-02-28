@@ -25,7 +25,7 @@ export const App = () => {
       <BrowserRouter>
         <Navbar />
         <Routes>
-          <Route path='/' element={<Navigate to="/posts" />} />
+          <Route path='/' element={<Navigate to="/auth" />} />
           <Route path='/posts' exact element={<Home />} />
           <Route path='/posts/search' exact element={<Home />} />
           <Route path='/user/reset-password' exact element={<ResetPassword />} />
